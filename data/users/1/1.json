@@ -1,0 +1,60 @@
+{
+    "task_id": "1",
+    "user_id": "1",
+    "parent_task_id": null,
+    "task_description": "Send a message to my mom",
+    "task_type": null,
+    "children_ids": [],
+    "conversation_clarification": [
+        {
+            "role": "system",
+            "content": "You are a mobile virtual assistant that understands and interacts with the user interface to complete a given task."
+        },
+        {
+            "role": "user",
+            "content": "Assess the user task \"Send a message to my mom\" to determine if it is sufficiently clear for execution on a smartphone. Given that seniors often provide vague or incomplete task descriptions, identify the most crucial piece of missing information. Ask a single, focused question that is most likely to clarify the task effectively. Return your analysis in JSON format, comprising: 1. \"Clear\": a boolean indicating if the task is clear enough as is, 2. \"Question\": a single question to obtain the most essential missing detail for task clarification. Example response for a clear task: {\"Clear\": \"True\", \"Question\": \"\"} Example response for an unclear task: {\"Clear\": \"False\", \"Question\": \"What is the full name of the person you want to contact?\"} or {\"Clear\": \"False\", \"Question\": \"Which app would you prefer to use for this communication?\"}"
+        },
+        {
+            "role": "assistant",
+            "content": "{\"Clear\": \"False\", \"Question\": \"What should the content of the message be?\"}"
+        },
+        {
+            "role": "user",
+            "content": "Send a message to my mom"
+        },
+        {
+            "role": "assistant",
+            "content": "{\"Clear\": \"False\", \"Question\": \"What should the content of the message be?\"}"
+        },
+        {
+            "role": "user",
+            "content": "Send a message to my mom"
+        },
+        {
+            "role": "assistant",
+            "content": "{\"Clear\": \"False\", \"Question\": \"What should the content of the message be?\"}"
+        },
+        {
+            "role": "user",
+            "content": "Send a message to my mom"
+        },
+        {
+            "role": "assistant",
+            "content": "{\"Clear\": \"False\", \"Question\": \"What should the content of the message be?\"}"
+        }
+    ],
+    "res_clarification": {
+        "Clear": "False",
+        "Question": "What should the content of the message be?"
+    },
+    "res_decomposition": {},
+    "res_classification": {},
+    "conversation_automation": [
+        {
+            "role": "system",
+            "content": "You are a mobile virtual assistant that understands and interacts with the user interface to complete a given task."
+        }
+    ],
+    "steps": [],
+    "task_execution_result": null
+}
