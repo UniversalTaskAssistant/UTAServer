@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // input format: JSON string
     // input example: {"user_id": "1", "task_id": "1", "user_msg": "Send a message to my mom"}
     initializeChatbot(`ws://localhost:8000/ws/declaration?token=${accessToken}`, 'Declaration');
-    initializeChatbot(`ws://52.43.37.182:5000/ws/declaration?token=${accessToken}`, 'Declaration');
-
+    initializeChatbot(`wss://api.apputa.online/ws/declaration?token=${accessToken}`, 'Declaration');
 
 });
 
