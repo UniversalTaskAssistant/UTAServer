@@ -4,9 +4,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from ...services import user_service
 from ...services.database import get_db_session
-from ...schemas.user_schema import UserCreate, UserResponse, UserWithToken, Token, UserUpdate, RefreshTokenQuery
+from ...schemas.user_schema import UserCreate, UserResponse, UserWithToken, Token, UserUpdate, RefreshTokenQuery, SetupUserQuery
 from fastapi.responses import JSONResponse
 from ..dependencies import get_current_user
+from uta.UTA import UTA
 
 router = APIRouter()
 
@@ -35,6 +36,24 @@ async def edit_user_by_uuid_endpoint(user_uuid: str, update_data: UserUpdate, db
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
+
+# Delete user by Email
+@router.delete("/users/delete", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user_by_email_endpoint(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db_session)):
+    # Authenticate user
+    user = await user_service.authenticate_user(db, form_data.username, form_data.password)
+    if not user or user.email != form_data.username:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    print(form_data.username, form_data.password)
+    # Proceed with deletion
+    success = await user_service.delete_user_by_email(db, form_data.username)
+    if not success:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return {"detail": "User successfully deleted"}
 
 # Login
 @router.post("/users/login", response_model=UserWithToken)
@@ -65,3 +84,14 @@ async def refresh_access_token(token_query: RefreshTokenQuery = Body(...), db: A
         )
     access_token = user_service.create_access_token(data={"sub": uuid})
     return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer")
+
+# Setup user
+@router.post("/users/setup", response_model=SetupUserQuery)
+async def setup_user_endpoint(setup_data: SetupUserQuery = Body(...), _: None = Depends(get_current_user)):
+    try:
+        uta = UTA()
+        user = uta.setup_user(user_id=setup_data.user_id, device_resolution=setup_data.resolution, app_list=setup_data.app_list)
+        response = SetupUserQuery(user_id=user.user_id, resolution=user.device_resolution, app_list=user.app_list)
+        return JSONResponse(content=response.model_dump()) 
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

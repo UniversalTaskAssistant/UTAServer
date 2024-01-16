@@ -1,4 +1,4 @@
-from UTABackend.UTA import UTA
+from uta.UTA import UTA
 
 class Declaration:
     def __init__(self, uta) -> None:

@@ -2,4 +2,5 @@
 test/
 uta_env/
 uta.pem
-UTABackend/
+uta/
+data/

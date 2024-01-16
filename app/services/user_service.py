@@ -2,6 +2,7 @@
 from typing import Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import delete
 from ..models.user_model import User
 from ..core.security import hash_password
 from ..core.config import settings
@@ -43,6 +44,12 @@ async def edit_user_by_uuid(db: AsyncSession, user_uuid: str, update_data: dict)
 async def get_user_by_email(db: AsyncSession, email: str) -> User:
     result = await db.execute(select(User).where(User.email == email))
     return result.scalar_one_or_none()
+
+# Delete user by Email
+async def delete_user_by_email(db: AsyncSession, email: str) -> None:
+    result = await db.execute(delete(User).where(User.email == email))
+    await db.commit()
+    return result.rowcount > 0
 
 # Get user by UUID
 async def get_user_by_uuid(db: AsyncSession, uuid: str) -> User:

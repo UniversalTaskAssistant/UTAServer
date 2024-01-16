@@ -1,6 +1,6 @@
 # app/schemas/user_schema.py
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, Tuple, List
 
 class UserCreate(BaseModel):
     name: str
@@ -32,3 +32,8 @@ class RefreshTokenQuery(BaseModel):
 class UserWithToken(BaseModel):
     user: UserResponse
     token: Token
+
+class SetupUserQuery(BaseModel):
+    user_id: str
+    resolution: Tuple[int, int]
+    app_list: List[str]

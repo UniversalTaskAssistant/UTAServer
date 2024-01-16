@@ -1,78 +1,78 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const uploadButton = document.getElementById('uploadButton');
+    const submitButton = document.getElementById('submitButton');
     const accessToken = sessionStorage.getItem('accessToken');
-    const agent_uuid = "agent_rmOHpnsWvJ1hNWWQ";
-    const instruction = "Instruction-1"
-    // declaration
-    // input format: JSON string
-    // input example: {"user_id": "1", "task_id": "1", "user_msg": "Send a message to my mom"}
-    initializeChatbot(`ws://localhost:8000/ws/declaration?token=${accessToken}`, 'Declaration');
-    initializeChatbot(`wss://api.apputa.online/ws/declaration?token=${accessToken}`, 'Declaration');
+    let websocket = new WebSocket(`ws://localhost:8000/ws/automation?token=${accessToken}`);
 
-});
-
-function initializeChatbot(endpoint, chatbotName) {
-
-    const chatbotContainer = document.createElement('div');
-    chatbotContainer.classList.add('chatbot-container');
-
-    const chatbotTitle = document.createElement('h2');
-    chatbotTitle.textContent = chatbotName;
-    chatbotTitle.classList.add('chatbot-title');
-    chatbotContainer.appendChild(chatbotTitle);
-
-    const chatContainer = document.createElement('div');
-    chatContainer.classList.add('chat-container');
-
-    const inputContainer = document.createElement('div');
-    inputContainer.classList.add('input-container');
-
-    const messageInput = document.createElement('input');
-    messageInput.type = 'text';
-    messageInput.classList.add('message-input');
-
-    const sendButton = document.createElement('button');
-    sendButton.textContent = 'Send';
-    sendButton.classList.add('send-button');
-
-    inputContainer.appendChild(messageInput);
-    inputContainer.appendChild(sendButton);
-    chatbotContainer.appendChild(chatContainer);
-    chatbotContainer.appendChild(inputContainer);
-    document.getElementById('chatbots-container').appendChild(chatbotContainer);
-
-    const ws = new WebSocket(endpoint);
-
-    ws.onopen = function(event) {
-        console.log(`${chatbotName} connected to WebSocket`);
+    websocket.onopen = function(event) {
+        console.log('WebSocket Connected');
     };
 
-    ws.onmessage = function(event) {
-        const data = event.data;
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('server-message');
-        messageElement.textContent = data.copilot || data;
-        chatContainer.appendChild(messageElement);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+    websocket.onerror = function(event) {
+        console.error('WebSocket Error: ' + event.message);
     };
 
-    sendButton.onclick = function() {
-        const message = messageInput.value;
-        if (message) {
-            ws.send(message);
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('user-message');
-            messageElement.textContent = message;
-            chatContainer.appendChild(messageElement);
-            messageInput.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+    websocket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+    
+        if (message.type && message.type === 'progress') {
+            // Update progress bar
+            const progressBar = document.getElementById('uploadProgress');
+            progressBar.value = message.value;
+        } else {
+            // Handle other messages
+            document.getElementById('result').innerText += event.data + '\n';
+        }   
+     };
+
+    websocket.onclose = function(event) {
+        console.log('WebSocket Closed: ' + event.reason);
+    };
+
+    uploadButton.addEventListener('click', function() {
+        const file = document.getElementById('fileInput').files[0];
+        const xml = document.getElementById('xmlInput').value;
+        sendFileAndXml(file, xml);
+    });
+
+    submitButton.addEventListener('click', function() {
+        const data = document.getElementById('dataInput').value;
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            websocket.send(data);
         }
-    };
+    });
 
-    ws.onerror = function(event) {
-        console.error("WebSocket error observed:", event);
-    };
+    function sendFileAndXml(file, xml) {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            // Send file metadata
+            const metadata = { file_size: file.size, xml: xml };
+            websocket.send(JSON.stringify(metadata));
 
-    ws.onclose = function(event) {
-        console.log(`${chatbotName} WebSocket connection closed:`, event);
-    };
-}
+            // Start uploading file
+            const chunkSize = 1024; // Adjust chunk size as needed
+            const reader = new FileReader();
+            let offset = 0;
+
+            reader.onload = function(event) {
+                if (!event.target.error) {
+                    websocket.send(event.target.result);
+                    offset += event.target.result.byteLength;
+                    readNextChunk();
+                } else {
+                    console.log('Read error: ' + event.target.error);
+                }
+            };
+
+            function readNextChunk() {
+                if (offset < file.size) {
+                    const slice = file.slice(offset, offset + chunkSize);
+                    reader.readAsArrayBuffer(slice);
+                }
+            }
+
+            readNextChunk();
+        } else {
+            console.log('WebSocket is not connected');
+        }
+    }
+});

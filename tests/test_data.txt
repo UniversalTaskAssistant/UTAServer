@@ -1,1 +1,5 @@
-{"user_id": "1", "task_id": "1", "user_msg": "Send a message to my mom"}
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "user_msg": "Send a message to my mom"}
+
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "package_name": "wechat", "activity_name": "Main"}
+
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "resolution": [1080, 2340], "app_list": ["app1", "app2", "app3"]}
