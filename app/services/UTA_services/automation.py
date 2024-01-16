@@ -18,5 +18,6 @@ class Automation:
             ui_xml_file=message.get("ui_xml"),
             package_name=message.get("package_name"), 
             activity_name=message.get("activity_name"), 
+            keyboard_active=message.get("keyboard_active"),
             printlog=False)
         yield action
