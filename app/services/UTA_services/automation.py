@@ -11,7 +11,7 @@ class Automation:
         return cls(uta)
     
     async def automation(self, message):
-        _, action = self.uta.automate_task(
+        action = self.uta.automate_task(
             user_id=message.get("user_id"), 
             task_id=message.get("task_id"), 
             ui_img_file=message.get("ui_img"), 

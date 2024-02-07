@@ -39,7 +39,6 @@ async def automation_endpoint(websocket: WebSocket):
         # Process user message
         data = await websocket.receive_json()
         data.update({"ui_img": image_file, "ui_xml": xml_file})
-        print(data)
         async for response in Automation_instance.automation(data):
             await websocket.send_json(response)
     
