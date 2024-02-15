@@ -1,8 +1,11 @@
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, WebSocket, Depends
 from ...services.database import SessionLocal
 from ...services.UTA_services.automation import Automation
 from ...services.UTA_services.declaration import Declaration
+from ...services.UTA_services.fetch_tasks import fetch_tasks
+from ...schemas.task_list_schema import TaskList
 from ...services.user_service import validate_token 
+from ..dependencies import get_current_user
 import os
 
 router = APIRouter()
@@ -52,3 +55,8 @@ async def declaration_endpoint(websocket: WebSocket):
         data = await websocket.receive_json()
         async for response in Declaration_instance.declaration(data):
             await websocket.send_json(response)
+
+@router.get("/tasklist", response_model=TaskList)
+async def fetch_task_list(_: None = Depends(get_current_user)):
+    tasklist = await fetch_tasks()
+    return tasklist

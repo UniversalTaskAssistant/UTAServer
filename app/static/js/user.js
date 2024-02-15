@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function() {
         refreshAccessToken();
     });
 
+    document.getElementById('fetchTaskButton').addEventListener('click', function(event) {
+        fetchTaskList();
+    });
+
     document.getElementById("setupUserForm").addEventListener("submit", function(event) {
         event.preventDefault();
         setupUser();
@@ -176,5 +180,42 @@ async function refreshAccessToken() {
     } catch (error) {
         console.error('Error refreshing access token:', error);
         document.getElementById('result').textContent = 'Error refreshing token.';
+    }
+}
+
+async function fetchTaskList() {
+    try {
+        // Get the access token from session storage
+        const accessToken = sessionStorage.getItem('accessToken');
+
+        // Check if the access token exists
+        if (!accessToken) {
+            throw new Error('Access token not found. Please login first.');
+        }
+
+        // Send a GET request to the /tasklist endpoint
+        const response = await fetch('/tasklist', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}` // Include the access token in the Authorization header
+            }
+        });
+
+        // Check if the response is ok
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON response
+        const taskList = await response.json();
+
+        // Handle the task list (e.g., update the UI)
+        console.log('Fetched Task List:', taskList);
+        document.getElementById('result').textContent = 'Task list: ' + JSON.stringify(taskList);
+
+    } catch (error) {
+        console.error('Error fetching task list:', error);
+        // Handle the error (e.g., update the UI or inform the user)
     }
 }
