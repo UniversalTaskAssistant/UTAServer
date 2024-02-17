@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchTaskList();
     });
 
+    document.getElementById('fetchTaskInfoButton').addEventListener('click', function(event) {
+        fetchTaskInfoList();
+    });
+
     document.getElementById("setupUserForm").addEventListener("submit", function(event) {
         event.preventDefault();
         setupUser();
@@ -216,6 +220,43 @@ async function fetchTaskList() {
 
     } catch (error) {
         console.error('Error fetching task list:', error);
+        // Handle the error (e.g., update the UI or inform the user)
+    }
+}
+
+async function fetchTaskInfoList() {
+    try {
+        // Get the access token from session storage
+        const accessToken = sessionStorage.getItem('accessToken');
+
+        // Check if the access token exists
+        if (!accessToken) {
+            throw new Error('Access token not found. Please login first.');
+        }
+
+        // Send a GET request to the /tasklist endpoint
+        const response = await fetch('/taskinfolist', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}` // Include the access token in the Authorization header
+            }
+        });
+
+        // Check if the response is ok
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON response
+        const taskInfoList = await response.json();
+
+        // Handle the task list (e.g., update the UI)
+        console.log('Fetched Task Info List:', taskInfoList);
+        document.getElementById('result').textContent = 'Task info list: ' + JSON.stringify(taskInfoList);
+
+    } catch (error) {
+        console.error('Error fetching task info list:', error);
         // Handle the error (e.g., update the UI or inform the user)
     }
 }

@@ -5,3 +5,6 @@ from typing import List
 
 class TaskList(BaseModel):
     task_list: List
+
+class TaskInfoList(BaseModel):
+    task_info_list: List
