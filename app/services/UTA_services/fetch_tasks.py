@@ -9,3 +9,7 @@ async def fetch_tasks():
 async def fetch_tasks_info():
     resp = uta.fetch_task_info_list()
     return {"task_info_list": resp}  
+
+async def fetch_hc_task_list():
+    resp = uta.fetch_hardcode_task_list()
+    return {"hc_task_list": resp}  

@@ -2,8 +2,8 @@ from fastapi import APIRouter, WebSocket, Depends
 from ...services.database import SessionLocal
 from ...services.UTA_services.automation import Automation
 from ...services.UTA_services.declaration import Declaration
-from ...services.UTA_services.fetch_tasks import fetch_tasks, fetch_tasks_info
-from ...schemas.task_list_schema import TaskList, TaskInfoList
+from ...services.UTA_services.fetch_tasks import fetch_tasks, fetch_hc_task_list
+from ...schemas.task_list_schema import TaskList, HCTaskList
 from ...services.user_service import validate_token 
 from ..dependencies import get_current_user
 import os
@@ -61,7 +61,7 @@ async def fetch_task_list(_: None = Depends(get_current_user)):
     tasklist = await fetch_tasks()
     return tasklist
 
-@router.get("/taskinfolist", response_model=TaskInfoList)
-async def fetch_task_info_list(_: None = Depends(get_current_user)):
-    taskinfolist = await fetch_tasks_info()
-    return taskinfolist
+@router.get("/hctasklist", response_model=HCTaskList)
+async def fetch_hardcode_task_list(_: None = Depends(get_current_user)):
+    hctasklist = await fetch_hc_task_list()
+    return hctasklist
