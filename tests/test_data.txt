@@ -8,6 +8,6 @@
 
 {"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "user_msg": "Send a message to my mom"}
 
-{"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "package_name": "wechat", "activity_name": "Main", "keyboard_active": "True"}
+{"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "keyboard_active": "True"}
 
 {"user_id": "user_95z4S1v1ObbmaQXO", "resolution": [1080, 2340], "app_list": ["app1", "app2", "app3"]}
