@@ -103,6 +103,7 @@ function getUser() {
 
 function setupUser() {
     const userData = document.getElementById("userData").value;
+    const accessToken = sessionStorage.getItem('accessToken');
 
     try {
         const parsedData = JSON.parse(userData);
