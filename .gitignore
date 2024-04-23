@@ -4,3 +4,4 @@ uta_env/
 uta.pem
 uta
 data/
+__pycache__/
