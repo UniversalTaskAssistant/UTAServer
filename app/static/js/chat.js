@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadButton = document.getElementById('uploadButton');
     const submitButton = document.getElementById('submitButton');
     const accessToken = sessionStorage.getItem('accessToken');
-    let websocket = new WebSocket(`ws://localhost:8000/ws/automation?token=${accessToken}`);
-    // let websocket = new WebSocket(`wss://api.apputa.online/ws/automation?token=${accessToken}`);
-
+    let websocket = new WebSocket(`ws://localhost:8000/ws/chat?token=${accessToken}`);
+    // let websocket = new WebSocket(`wss://api.apputa.online/ws/chat?token=${accessToken}`);
 
     websocket.onopen = function(event) {
         console.log('WebSocket Connected');
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Send file metadata
             const metadata = { file_size: file.size, xml: xml };
             websocket.send(JSON.stringify(metadata));
-
+            
             // Start uploading file
             const chunkSize = 1024; // Adjust chunk size as needed
             const reader = new FileReader();

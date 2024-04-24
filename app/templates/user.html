@@ -43,12 +43,33 @@
         <input type="submit" value="Submit">
     </form>
 
+    <h2>Fetch conversation</h2>
+    <form id="fetchConversationForm">
+        <label for="convData">Conversation Data (JSON):</label><br>
+        <textarea id="convData" name="convData" rows="5" cols="33"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Fetch all previous conversation preview</h2>
+    <form id="fetchAllConversationPreviewForm">
+        <label for="allConvData">All Conversation Data (JSON):</label><br>
+        <textarea id="allConvData" name="allConvData" rows="5" cols="33"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Fetch all previous task</h2>
+    <form id="fetchAllTaskForm">
+        <label for="allTaskData">All Task Data (JSON):</label><br>
+        <textarea id="allTaskData" name="allTaskData" rows="5" cols="33"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+
     <h2>Refresh Token</h2>
     <button id="refreshTokenButton">Refresh Token</button>
     <button id="declarationButton">Declaration</button>
     <button id="automationButton">Automation</button>
     <button id="fetchTaskButton">Fetch tasks</button>
-    <button id="fetchHCTaskButton">Fetch HC tasks</button>
+    <button id="chatButton">Chat</button>
 
     <div id="result"></div>
 </body>

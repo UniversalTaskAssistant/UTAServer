@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat</title>
+</head>
+<body>
+    <div>
+        <input type="file" id="fileInput">
+    </div>
+    <div>
+        <textarea id="xmlInput" rows="4" cols="50"></textarea><br>
+        <button id="uploadButton">Upload</button>
+    </div>
+    <div>
+        <progress id="uploadProgress" value="0" max="100"></progress>
+    </div>
+    <div>
+        <textarea id="dataInput" rows="4" cols="50"></textarea><br>
+        <button id="submitButton">Submit</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script src="/static/js/chat.js"></script>
+</body>
+</html>

@@ -4,10 +4,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from ...services import user_service
 from ...services.database import get_db_session
-from ...schemas.user_schema import UserCreate, UserResponse, UserWithToken, Token, UserUpdate, RefreshTokenQuery, SetupUserQuery
+from ...schemas.user_schema import UserCreate, UserResponse, UserWithToken, Token, UserUpdate, RefreshTokenQuery
 from fastapi.responses import JSONResponse
 from ..dependencies import get_current_user
-from uta.UTA import UTA
 
 router = APIRouter()
 
@@ -84,14 +83,3 @@ async def refresh_access_token(token_query: RefreshTokenQuery = Body(...), db: A
         )
     access_token = user_service.create_access_token(data={"sub": uuid})
     return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer")
-
-# Setup user
-@router.post("/users/setup", response_model=SetupUserQuery)
-async def setup_user_endpoint(setup_data: SetupUserQuery = Body(...), _: None = Depends(get_current_user)):
-    try:
-        uta = UTA()
-        user = uta.setup_user(user_id=setup_data.user_id, device_resolution=setup_data.resolution, app_list=setup_data.app_list)
-        response = SetupUserQuery(user_id=user.user_id, resolution=user.device_resolution, app_list=user.app_list)
-        return JSONResponse(content=response.model_dump()) 
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))

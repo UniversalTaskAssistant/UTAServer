@@ -27,13 +27,24 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchTaskList();
     });
 
-    document.getElementById('fetchHCTaskButton').addEventListener('click', function(event) {
-        fetchHCTaskList();
-    });
-
     document.getElementById("setupUserForm").addEventListener("submit", function(event) {
         event.preventDefault();
         setupUser();
+    });
+
+    document.getElementById("fetchConversationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        fetchConversation();
+    });
+
+    document.getElementById("fetchAllConversationPreviewForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        fetchAllConversationPreview();
+    });
+
+    document.getElementById("fetchAllTaskForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        fetchAllPreviousTask();
     });
 
     document.getElementById('declarationButton').addEventListener('click', function() {
@@ -42,6 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('automationButton').addEventListener('click', function() {
         window.location.href = '/automation.html';
+    });
+
+    document.getElementById('chatButton').addEventListener('click', function() {
+        window.location.href = '/chat.html';
     });
 });
 const accessToken = sessionStorage.getItem('accessToken');
@@ -109,6 +124,75 @@ function setupUser() {
         const parsedData = JSON.parse(userData);
 
         fetch("/users/setup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}` 
+            },
+            body: JSON.stringify(parsedData)
+        })
+        .then(response => response.json())
+        .then(data => showResult(data))
+        .catch(error => console.error("Error:", error));
+    } catch (error) {
+        console.error("Invalid JSON:", error);
+    }
+}
+
+function fetchConversation() {
+    const convData = document.getElementById("convData").value;
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    try {
+        const parsedData = JSON.parse(convData);
+
+        fetch("/conversation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}` 
+            },
+            body: JSON.stringify(parsedData)
+        })
+        .then(response => response.json())
+        .then(data => showResult(data))
+        .catch(error => console.error("Error:", error));
+    } catch (error) {
+        console.error("Invalid JSON:", error);
+    }
+}
+
+function fetchAllConversationPreview() {
+    const allConvData = document.getElementById("allConvData").value;
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    try {
+        const parsedData = JSON.parse(allConvData);
+
+        fetch("/allconversationpreview", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}` 
+            },
+            body: JSON.stringify(parsedData)
+        })
+        .then(response => response.json())
+        .then(data => showResult(data))
+        .catch(error => console.error("Error:", error));
+    } catch (error) {
+        console.error("Invalid JSON:", error);
+    }
+}
+
+function fetchAllPreviousTask() {
+    const allTaskData = document.getElementById("allTaskData").value;
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    try {
+        const parsedData = JSON.parse(allTaskData);
+
+        fetch("/allprevioustask", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -200,43 +284,6 @@ async function fetchTaskList() {
 
         // Send a GET request to the /tasklist endpoint
         const response = await fetch('/tasklist', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}` // Include the access token in the Authorization header
-            }
-        });
-
-        // Check if the response is ok
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // Parse the JSON response
-        const taskList = await response.json();
-
-        // Handle the task list (e.g., update the UI)
-        console.log('Fetched Task List:', taskList);
-        document.getElementById('result').textContent = 'Task list: ' + JSON.stringify(taskList);
-
-    } catch (error) {
-        console.error('Error fetching task list:', error);
-        // Handle the error (e.g., update the UI or inform the user)
-    }
-}
-
-async function fetchHCTaskList() {
-    try {
-        // Get the access token from session storage
-        const accessToken = sessionStorage.getItem('accessToken');
-
-        // Check if the access token exists
-        if (!accessToken) {
-            throw new Error('Access token not found. Please login first.');
-        }
-
-        // Send a GET request to the /tasklist endpoint
-        const response = await fetch('/hctasklist', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
