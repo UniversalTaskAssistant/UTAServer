@@ -10,6 +10,12 @@
 ### Fetch conversation
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2"}
 
+### Fetch all previouse conversation preview
+{"user_id": "user_Sc9RjYbBPFoXffwQ"}
+
+### Fetch all previous task
+{"user_id": "user_Sc9RjYbBPFoXffwQ"}
+
 ### Chat
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2", "query": "how can you help me", "resolution": [1080, 2340]}
 

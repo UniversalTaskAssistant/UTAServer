@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadButton = document.getElementById('uploadButton');
     const submitButton = document.getElementById('submitButton');
     const accessToken = sessionStorage.getItem('accessToken');
-    // let websocket = new WebSocket(`ws://localhost:8000/ws/chat?token=${accessToken}`);
-    let websocket = new WebSocket(`wss://api.apputa.online/ws/chat?token=${accessToken}`);
+    let websocket = new WebSocket(`ws://localhost:8000/ws/chat?token=${accessToken}`);
+    // let websocket = new WebSocket(`wss://api.apputa.online/ws/chat?token=${accessToken}`);
 
     websocket.onopen = function(event) {
         console.log('WebSocket Connected');
@@ -31,9 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     uploadButton.addEventListener('click', function() {
+        const imagecheckbox = document.getElementById('imageCheckbox');
         const file = document.getElementById('fileInput').files[0];
         const xml = document.getElementById('xmlInput').value;
-        sendFileAndXml(file, xml);
+        sendFileAndXml(imagecheckbox, file, xml);
     });
 
     submitButton.addEventListener('click', function() {
@@ -43,35 +44,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function sendFileAndXml(file, xml) {
+    function sendFileAndXml(imagecheckbox, file, xml) {
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             // Send file metadata
-            const metadata = { file_size: file.size, xml: xml };
-            websocket.send(JSON.stringify(metadata));
+            if (imagecheckbox.checked){
+                const metadata = { file_size: file.size, xml: xml };
+                websocket.send(JSON.stringify(metadata));
+                
+                // Start uploading file
+                const chunkSize = 1024; // Adjust chunk size as needed
+                const reader = new FileReader();
+                let offset = 0;
+
+                reader.onload = function(event) {
+                    if (!event.target.error) {
+                        websocket.send(event.target.result);
+                        offset += event.target.result.byteLength;
+                        readNextChunk();
+                    } else {
+                        console.log('Read error: ' + event.target.error);
+                    }
+                };
             
-            // Start uploading file
-            const chunkSize = 1024; // Adjust chunk size as needed
-            const reader = new FileReader();
-            let offset = 0;
-
-            reader.onload = function(event) {
-                if (!event.target.error) {
-                    websocket.send(event.target.result);
-                    offset += event.target.result.byteLength;
-                    readNextChunk();
-                } else {
-                    console.log('Read error: ' + event.target.error);
+                function readNextChunk() {
+                    if (offset < file.size) {
+                        const slice = file.slice(offset, offset + chunkSize);
+                        reader.readAsArrayBuffer(slice);
+                    }
                 }
-            };
 
-            function readNextChunk() {
-                if (offset < file.size) {
-                    const slice = file.slice(offset, offset + chunkSize);
-                    reader.readAsArrayBuffer(slice);
-                }
+                readNextChunk();
             }
-
-            readNextChunk();
+            else{
+                const metadata = { file_size: 0, xml: "" };
+                websocket.send(JSON.stringify(metadata));
+            }
         } else {
             console.log('WebSocket is not connected');
         }

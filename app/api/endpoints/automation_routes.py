@@ -59,26 +59,28 @@ async def chat_endpoint(websocket: WebSocket):
         metadata = await websocket.receive_json()
         file_size = metadata.get("file_size", 0)
         xml = metadata.get("xml", "")
-        image_file = os.path.join("data", uuid, uuid + "_chat.png")
-        xml_file = os.path.join("data", uuid, uuid + "_chat.xml")
+        if file_size: 
+            image_file = os.path.join("data", uuid, uuid + "_chat.png")
+            xml_file = os.path.join("data", uuid, uuid + "_chat.xml")
 
-        # Receive the file in chunks
-        with open(image_file, "wb") as file:
-            bytes_received = 0
-            while bytes_received < file_size:
-                data = await websocket.receive_bytes()
-                file.write(data)
-                bytes_received += len(data)
-                progress = (bytes_received / file_size) * 100
-                await websocket.send_json({"type": "progress", "value": progress})
-        
-        # Save XML file
-        with open(xml_file, "w", encoding='utf-8') as file:
-            file.write(xml)
+            # Receive the file in chunks
+            with open(image_file, "wb") as file:
+                bytes_received = 0
+                while bytes_received < file_size:
+                    data = await websocket.receive_bytes()
+                    file.write(data)
+                    bytes_received += len(data)
+                    progress = (bytes_received / file_size) * 100
+                    await websocket.send_json({"type": "progress", "value": progress})
+            
+            # Save XML file
+            with open(xml_file, "w", encoding='utf-8') as file:
+                file.write(xml)
 
-        # Process user message
-        data = await websocket.receive_json()
-        data.update({"ui_img_file": image_file, "ui_xml_file": xml_file})
-
+            # Process user message
+            data = await websocket.receive_json()
+            data.update({"ui_img_file": image_file, "ui_xml_file": xml_file})
+        else:
+            data = await websocket.receive_json()
         async for response in Chat_instance.chat(**data):
             await websocket.send_json(response)
