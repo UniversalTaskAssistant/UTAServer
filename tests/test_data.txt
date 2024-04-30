@@ -17,7 +17,7 @@
 {"user_id": "user_Sc9RjYbBPFoXffwQ"}
 
 ### Chat
-{"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2", "query": "how can you help me", "resolution": [1080, 2340]}
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2", "query": "how can you help me"}
 
 
 ### Remot
