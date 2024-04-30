@@ -13,4 +13,5 @@ class Chat:
     
     async def chat(self, **kwargs):
         resp = self.uta.chat(**kwargs)
-        yield json.dumps(ConversationResponse(**resp).model_dump())
+        # yield json.dumps(ConversationResponse(**resp).model_dump())
+        yield ConversationResponse(**resp).model_dump()
