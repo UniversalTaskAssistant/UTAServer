@@ -9,7 +9,8 @@ from ...services.UTA_services.fetch_data import (
     setup_user, 
     fetch_conversation,
     fetch_all_previouse_conversation_preview,
-    fetch_all_previouse_task
+    fetch_all_previouse_task,
+    set_my_app_recommend_tasks
 )
 from ...schemas.data_schema import (
     TaskList, 
@@ -17,9 +18,11 @@ from ...schemas.data_schema import (
     FetchConvQuery, 
     FetchAllConvPreviewQuery, 
     FetchAllTaskQuery, 
+    FetchAppListQuery,
     ConversationResponse,
     AllConversationPreviewResponse,
-    AllTaskResponse
+    AllTaskResponse,
+    SetAppRecommendTaskResponse
 )
 router = APIRouter()
 
@@ -67,6 +70,16 @@ async def fetch_conversation_endpoint(fetch_query: FetchAllTaskQuery = Body(...)
     try: 
         result = await fetch_all_previouse_task(**fetch_query.model_dump())
         response = AllTaskResponse(**result)
+        return JSONResponse(content=response.model_dump()) 
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+# Set my apps by recommending tasks
+@router.post("/setapprecommendtask", response_model=SetAppRecommendTaskResponse)
+async def set_my_app_recommend_tasks_endpoint(fetch_query: FetchAppListQuery = Body(...), _: None = Depends(get_current_user)):
+    try: 
+        result = await set_my_app_recommend_tasks(**fetch_query.model_dump())
+        response = SetAppRecommendTaskResponse(**result)
         return JSONResponse(content=response.model_dump()) 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

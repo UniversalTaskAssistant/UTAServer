@@ -19,6 +19,15 @@
 ### Chat
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2", "query": "how can you help me"}
 
+### set my apps by recommending tasks
+{"app_list": ["app1", "app2", "app3"]}
+
+### automation
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "selected_task": "Send a message"}
+
+### RAI
+{"query": "Check this image"}
+
 
 ### Remot
 

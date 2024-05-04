@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchAllPreviousTask();
     });
 
+    document.getElementById("fetchAppListForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        setAppRecommendTask();
+    });
+
     document.getElementById('declarationButton').addEventListener('click', function() {
         window.location.href = '/declaration.html';
     });
@@ -57,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('chatButton').addEventListener('click', function() {
         window.location.href = '/chat.html';
+    });
+
+    document.getElementById('queryRAIButton').addEventListener('click', function() {
+        window.location.href = '/queryrai.html';
     });
 });
 const accessToken = sessionStorage.getItem('accessToken');
@@ -208,6 +217,29 @@ function fetchAllPreviousTask() {
     }
 }
 
+function setAppRecommendTask() {
+    const appListData = document.getElementById("appListData").value;
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    try {
+        const parsedData = JSON.parse(appListData);
+
+        fetch("/setapprecommendtask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}` 
+            },
+            body: JSON.stringify(parsedData)
+        })
+        .then(response => response.json())
+        .then(data => showResult(data))
+        .catch(error => console.error("Error:", error));
+    } catch (error) {
+        console.error("Invalid JSON:", error);
+    }
+}
+
 function showResult(data) {
     const resultDiv = document.getElementById("result");
     resultDiv.textContent = JSON.stringify(data, null, 2);
@@ -274,37 +306,28 @@ async function refreshAccessToken() {
 
 async function fetchTaskList() {
     try {
-        // Get the access token from session storage
         const accessToken = sessionStorage.getItem('accessToken');
 
-        // Check if the access token exists
         if (!accessToken) {
             throw new Error('Access token not found. Please login first.');
         }
 
-        // Send a GET request to the /tasklist endpoint
         const response = await fetch('/tasklist', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}` // Include the access token in the Authorization header
+                'Authorization': `Bearer ${accessToken}` 
             }
         });
-
-        // Check if the response is ok
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // Parse the JSON response
         const taskList = await response.json();
 
-        // Handle the task list (e.g., update the UI)
         console.log('Fetched Task List:', taskList);
         document.getElementById('result').textContent = 'Task list: ' + JSON.stringify(taskList);
 
     } catch (error) {
         console.error('Error fetching task list:', error);
-        // Handle the error (e.g., update the UI or inform the user)
     }
 }

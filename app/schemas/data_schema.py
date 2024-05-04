@@ -21,6 +21,9 @@ class FetchAllConvPreviewQuery(BaseModel):
 class FetchAllTaskQuery(BaseModel):
     user_id: str
 
+class FetchAppListQuery(BaseModel):
+    app_list: List
+
 class ConversationResponse(BaseModel):
     user_id: str
     conv_id: str
@@ -33,3 +36,6 @@ class AllConversationPreviewResponse(BaseModel):
 class AllTaskResponse(BaseModel):
     user_id: str
     task: List
+
+class SetAppRecommendTaskResponse(BaseModel):
+    app_tasks: List
