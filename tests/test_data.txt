@@ -28,8 +28,11 @@
 ### RAI
 {"query": "Check this image"}
 
+### Check action
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_desc": "Send a message", "resolution": [1080, 2340]}
 
-### Remot
+
+### Remote
 
 {"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "user_msg": "Send a message to my mom"}
 

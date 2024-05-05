@@ -1,5 +1,4 @@
 from uta.UTA import UTA
-import json
 from ...schemas.data_schema import ConversationResponse
 
 class Chat:

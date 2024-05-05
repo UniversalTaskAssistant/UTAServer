@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('submitButton');
     const accessToken = sessionStorage.getItem('accessToken');
     // let websocket = new WebSocket(`ws://localhost:8000/ws/automation?token=${accessToken}`);
+    // let websocket = new WebSocket(`ws://localhost:8000/ws/checkaction?token=${accessToken}`);
     let websocket = new WebSocket(`wss://api.apputa.online/ws/automation?token=${accessToken}`);
-
 
     websocket.onopen = function(event) {
         console.log('WebSocket Connected');
