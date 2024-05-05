@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     uploadButton.addEventListener('click', function() {
         const imagecheckbox = document.getElementById('imageCheckbox');
         const file = document.getElementById('fileInput').files[0];
-        const xml = document.getElementById('xmlInput').value;
-        sendFileAndXml(imagecheckbox, file, xml);
+        sendFile(imagecheckbox, file);
     });
 
     submitButton.addEventListener('click', function() {
@@ -44,11 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function sendFileAndXml(imagecheckbox, file, xml) {
+    function sendFile(imagecheckbox, file) {
         if (websocket && websocket.readyState === WebSocket.OPEN) {
             // Send file metadata
             if (imagecheckbox.checked){
-                const metadata = { file_size: file.size, xml: xml };
+                const metadata = { file_size: file.size};
                 websocket.send(JSON.stringify(metadata));
                 
                 // Start uploading file
@@ -76,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 readNextChunk();
             }
             else{
-                const metadata = { file_size: 0, xml: "" };
+                const metadata = { file_size: 0 };
                 websocket.send(JSON.stringify(metadata));
             }
         } else {
