@@ -4,6 +4,7 @@ from ...services.UTA_services.automation import Automation, QueryRAI, CheckActio
 from ...services.UTA_services.chat import Chat
 from ...services.user_service import validate_token 
 import os
+import json
 
 router = APIRouter()
 
@@ -46,7 +47,7 @@ async def automation_endpoint(websocket: WebSocket):
             try:
                 await websocket.send_json(response)
             except:
-                await websocket.send_text(response)
+                await websocket.send_text(json.dumps(response))
 
 @router.websocket("/ws/checkaction")
 async def automation_endpoint(websocket: WebSocket):
