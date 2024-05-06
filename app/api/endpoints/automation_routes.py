@@ -43,7 +43,10 @@ async def automation_endpoint(websocket: WebSocket):
         data = await websocket.receive_json()
         data.update({"ui_img_file": image_file, "ui_xml_file": xml_file})
         async for response in Automation_instance.automation(**data):
-            await websocket.send_json(response)
+            try:
+                await websocket.send_json(response)
+            except:
+                await websocket.send_text(response)
 
 @router.websocket("/ws/checkaction")
 async def automation_endpoint(websocket: WebSocket):

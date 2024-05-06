@@ -23,7 +23,10 @@
 {"app_list": ["app1", "app2", "app3"]}
 
 ### automation
-{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "selected_task": "Send a message"}
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "selected_task": "Play the latest news from ABC News in Youtube."}
+
+{"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "selected_task": "Play the latest news from ABC News in Youtube."}
+
 
 ### RAI
 {"query": "Check this image"}
