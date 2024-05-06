@@ -6,6 +6,7 @@
 
 ### Setup user
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "device_resolution": [1080, 2340], "app_list": ["app1", "app2", "app3"]}
+{"user_id": "user_Sc9RjYbBPFoXffwQ"}
 
 ### Fetch conversation
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2"}

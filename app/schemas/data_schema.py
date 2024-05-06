@@ -8,8 +8,8 @@ class TaskList(BaseModel):
 
 class SetupUserQuery(BaseModel):
     user_id: str
-    device_resolution: Tuple[int, int]
-    app_list: List[str]
+    # device_resolution: Tuple[int, int]
+    # app_list: List[str]
 
 class FetchConvQuery(BaseModel):
     user_id: str
