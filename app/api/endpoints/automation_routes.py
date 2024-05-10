@@ -42,11 +42,11 @@ async def automation_endpoint(websocket: WebSocket):
         # Process user message
         data = await websocket.receive_json()
         data.update({"ui_img_file": image_file, "ui_xml_file": xml_file})
-        async for response in Automation_instance.automation(**data):
-            try:
+        try:
+            async for response in Automation_instance.automation(**data):
                 await websocket.send_json(response)
-            except Exception as e:
-                await websocket.send_text(f"Error during automation {e}")
+        except Exception as e:
+            await websocket.send_text(f"Error during automation {e}")
 
 @router.websocket("/ws/checkaction")
 async def automation_endpoint(websocket: WebSocket):
@@ -83,11 +83,11 @@ async def automation_endpoint(websocket: WebSocket):
         # Process user message
         data = await websocket.receive_json()
         data.update({"ui_img_file": image_file, "ui_xml_file": xml_file})
-        async for response in CheckAction_instance.checkaction(**data):
-            try:
+        try:
+            async for response in CheckAction_instance.checkaction(**data):
                 await websocket.send_json(response)
-            except Exception as e:
-                await websocket.send_text(f"Error during check action {e}")
+        except Exception as e:
+            await websocket.send_text(f"Error during check action {e}")
 
 @router.websocket("/ws/chat")
 async def chat_endpoint(websocket: WebSocket):
@@ -118,11 +118,11 @@ async def chat_endpoint(websocket: WebSocket):
             data.update({"ui_img_file": image_file})
         else:
             data = await websocket.receive_json()
-        async for response in Chat_instance.chat(**data):
-            try:
+        try:
+            async for response in Chat_instance.chat(**data):
                 await websocket.send_json(response)
-            except Exception as e:
-                await websocket.send_text(f"Error during chat {e}")
+        except Exception as e:
+            await websocket.send_text(f"Error during chat {e}")
 
 @router.websocket("/ws/queryrai")
 async def queryrai_endpoint(websocket: WebSocket):
@@ -153,8 +153,8 @@ async def queryrai_endpoint(websocket: WebSocket):
         # Process user message
         data = await websocket.receive_json()
         data.update({"ui_img_file": image_file})
-        async for response in QueryRAI_instance.queryrai(**data):
-            try:
+        try:
+            async for response in QueryRAI_instance.queryrai(**data):
                 await websocket.send_json(response)
-            except Exception as e:
-                await websocket.send_text(f"Error during query rai {e}")
+        except Exception as e:
+            await websocket.send_text(f"Error during query rai {e}")
