@@ -10,7 +10,7 @@ class Automation:
         return cls(uta)
     
     async def automation(self, **kwargs):
-        _, action = self.uta.automate_task(**kwargs)
+        action = self.uta.automate_task(**kwargs)
         yield action
 
 class QueryRAI:

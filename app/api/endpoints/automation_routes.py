@@ -89,6 +89,41 @@ async def automation_endpoint(websocket: WebSocket):
         except Exception as e:
             await websocket.send_text(f"Error during check action {e}")
 
+# @router.websocket("/ws/chat")
+# async def chat_endpoint(websocket: WebSocket):
+#     async with SessionLocal() as db:
+#         uuid = await validate_token(db, websocket.query_params.get('token'))  
+#         if not uuid:
+#             await websocket.close(code=1008)
+#             return 
+#         Chat_instance = await Chat.create() 
+#     await websocket.accept()
+#     while True:
+#         # Receive file metadata
+#         metadata = await websocket.receive_json()
+#         file_size = metadata.get("file_size", 0)
+#         if file_size: 
+#             image_file = os.path.join("data", uuid, uuid + "_chat.png")
+#             with open(image_file, "wb") as file:
+#                 bytes_received = 0
+#                 while bytes_received < file_size:
+#                     data = await websocket.receive_bytes()
+#                     file.write(data)
+#                     bytes_received += len(data)
+#                     progress = (bytes_received / file_size) * 100
+#                     await websocket.send_json({"type": "progress", "value": progress})
+
+#             # Process user message
+#             data = await websocket.receive_json()
+#             data.update({"ui_img_file": image_file})
+#         else:
+#             data = await websocket.receive_json()
+#         try:
+#             async for response in Chat_instance.chat(**data):
+#                 await websocket.send_json(response)
+#         except Exception as e:
+#             await websocket.send_text(f"Error during chat {e}")
+
 @router.websocket("/ws/chat")
 async def chat_endpoint(websocket: WebSocket):
     async with SessionLocal() as db:
@@ -99,25 +134,7 @@ async def chat_endpoint(websocket: WebSocket):
         Chat_instance = await Chat.create() 
     await websocket.accept()
     while True:
-        # Receive file metadata
-        metadata = await websocket.receive_json()
-        file_size = metadata.get("file_size", 0)
-        if file_size: 
-            image_file = os.path.join("data", uuid, uuid + "_chat.png")
-            with open(image_file, "wb") as file:
-                bytes_received = 0
-                while bytes_received < file_size:
-                    data = await websocket.receive_bytes()
-                    file.write(data)
-                    bytes_received += len(data)
-                    progress = (bytes_received / file_size) * 100
-                    await websocket.send_json({"type": "progress", "value": progress})
-
-            # Process user message
-            data = await websocket.receive_json()
-            data.update({"ui_img_file": image_file})
-        else:
-            data = await websocket.receive_json()
+        data = await websocket.receive_json()
         try:
             async for response in Chat_instance.chat(**data):
                 await websocket.send_json(response)

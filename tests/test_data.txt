@@ -20,13 +20,16 @@
 ### Chat
 {"user_id": "user_Sc9RjYbBPFoXffwQ", "conv_id": "2", "query": "how can you help me"}
 
+{"user_id": "user_95z4S1v1ObbmaQXO", "conv_id": "2", "query": "how can you help me"}
+
+
 ### set my apps by recommending tasks
 {"app_list": ["app1", "app2", "app3"]}
 
 ### automation
-{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "selected_task": "Play the latest news from ABC News in Youtube."}
+{"user_id": "user_Sc9RjYbBPFoXffwQ", "task_id": "1", "task_desc": "Play the latest news from ABC News in Youtube."}
 
-{"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "selected_task": "Play the latest news from ABC News in Youtube."}
+{"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "task_desc": "Play the latest news from ABC News in Youtube."}
 
 
 ### RAI
@@ -37,6 +40,7 @@
 
 
 ### Remote
+{"user_id": "user_95z4S1v1ObbmaQXO"}
 
 {"user_id": "user_95z4S1v1ObbmaQXO", "task_id": "1", "user_msg": "Send a message to my mom"}
 

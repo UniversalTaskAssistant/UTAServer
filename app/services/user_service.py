@@ -63,15 +63,17 @@ async def authenticate_user(db: AsyncSession, email: str, password: str):
         return False
     return user
 
-def create_token(data: dict, expires_delta: timedelta) -> str:
+def create_token(data: dict, expires_delta: timedelta = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+        to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 def create_access_token(data: dict) -> str:
-    return create_token(data, timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+    # return create_token(data, timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+    return create_token(data)
 
 def create_refresh_token(data: dict) -> str:
     return create_token(data, timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES))
@@ -81,7 +83,9 @@ async def validate_token(db: AsyncSession, token: str) -> Union[str, bool]:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         uuid = payload.get("sub")
         expiry = payload.get("exp")
-        if uuid is None or expiry is None or datetime.fromtimestamp(expiry, timezone.utc) < datetime.now(timezone.utc):
+        if uuid is None:
+            return False
+        if expiry is not None and datetime.fromtimestamp(expiry, timezone.utc) < datetime.now(timezone.utc):
             return False
         user = await get_user_by_uuid(db, uuid)
         return uuid if user else False

@@ -11,5 +11,5 @@ class Chat:
         return cls(uta)
     
     async def chat(self, **kwargs):
-        resp = self.uta.chat(**kwargs)
+        resp = self.uta.chat_assistant(**kwargs)
         yield ConversationResponse(**resp).model_dump()
